@@ -63,6 +63,14 @@
     });
   }
 
+  // The invisible text layer uses the font Tesseract ships for this job (GlyphLessFont),
+  // which maps character codes straight to Unicode, so it works for every script,
+  // including Japanese, Chinese and Korean. Each recognised word is placed exactly over
+  // the printed word, running down the page for vertical text.
+  var CJK = /^(jpn|chi_sim|chi_tra|kor)/;
+  var NO_SPACE = /[぀-ヿ㐀-鿿豈-﫿＀-￯　-〿]$/; // Japanese and Chinese words join without spaces
+  var textFont = null;
+
   function wordsOf(data) {
     if (data.words && data.words.length) return data.words;
     var out = [];
@@ -70,27 +78,55 @@
     return out;
   }
 
-  // Latin-1 only: Helvetica in a PDF cannot encode other characters
-  function safe(text) { return text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"').replace(/[\u2013\u2014]/g, '-').replace(/[^\x20-\x7e\xa0-\xff]/g, ''); }
+  // Borrow Tesseract's font from a text-only page it produced
+  function loadFont(out, pdfBytes, P) {
+    var emb;
+    return P.PDFDocument.load(pdfBytes).then(function (doc) { return out.embedPdf(doc, [0]); }).then(function (e) {
+      emb = e;
+      return emb[0].embed(); // write it into the document now, so its font can be reused
+    }).then(function () {
+      var form = out.context.lookup(emb[0].ref);
+      var fonts = form.dict.lookup(P.PDFName.of('Resources'), P.PDFDict).lookup(P.PDFName.of('Font'), P.PDFDict);
+      textFont = fonts.entries()[0][1];
+    });
+  }
 
-  function addTextLayer(page, words, toPdf, font, P) {
-    page.pushOperators(P.pushGraphicsState(), P.setTextRenderingMode(P.TextRenderingMode.Invisible));
+  function hex(str) {
+    var h = '';
+    for (var i = 0; i < str.length; i++) h += ('0000' + str.charCodeAt(i).toString(16)).slice(-4);
+    return h.toUpperCase();
+  }
+
+  // corners: where the image's top-left, top-right and bottom-left land on the page
+  function addTextLayer(page, words, corners, cw, ch, vertical, P) {
+    var a = corners[0], b = corners[1], c = corners[2];
+    var ux = [(b[0] - a[0]) / cw, (b[1] - a[1]) / cw]; // one image pixel to the right
+    var uy = [(a[0] - c[0]) / ch, (a[1] - c[1]) / ch]; // one image pixel upwards
+    var at = function (x, y) { return [a[0] + ux[0] * x - uy[0] * y, a[1] + ux[1] * x - uy[1] * y]; };
+    var name = page.node.newFontDictionary('ReadableText', textFont);
+    var ops = [P.pushGraphicsState(), P.beginText(), P.setTextRenderingMode(P.TextRenderingMode.Invisible)];
     var placed = 0;
     words.forEach(function (w) {
-      var text = safe((w.text || '').trim());
+      var text = (w.text || '').trim();
       if (!text || w.confidence < 20) return;
-      var a = toPdf(w.bbox.x0, w.bbox.y1), b = toPdf(w.bbox.x1, w.bbox.y0);
-      var x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]);
-      var width = Math.abs(b[0] - a[0]), height = Math.abs(b[1] - a[1]);
-      if (width < 1 || height < 1) return;
-      var unit = font.widthOfTextAtSize(text, 1);
-      var size = unit > 0 ? Math.min(width / unit, height * 1.6) : height;
-      try {
-        page.drawText(text, { x: x, y: y + height * 0.18, size: Math.max(1, size), font: font });
-        placed++;
-      } catch (e) {}
+      var x0 = w.bbox.x0, y0 = w.bbox.y0, x1 = w.bbox.x1, y1 = w.bbox.y1, bw = x1 - x0, bh = y1 - y0;
+      if (bw < 1 || bh < 1) return;
+      var run = NO_SPACE.test(text) ? text : text + ' ';
+      var o, m, size, along;
+      if (vertical && bh > bw * 1.2) {
+        // Runs down the column: text direction points down, glyph tops point right
+        size = bw; along = bh; o = at(x0 + bw * 0.12, y0);
+        m = [-uy[0], -uy[1], ux[0], ux[1]];
+      } else {
+        size = bh; along = bw; o = at(x0, y1 - bh * 0.15);
+        m = [ux[0], ux[1], uy[0], uy[1]];
+      }
+      var squeeze = 100 * along / (text.length * 0.5 * size); // GlyphLessFont glyphs are half an em wide; the joining space sits just past the word
+      ops.push(P.setFontAndSize(name, size), P.setTextMatrix(m[0], m[1], m[2], m[3], o[0], o[1]), P.setCharacterSqueeze(squeeze), P.showText(P.PDFHexString.of(hex(run))));
+      placed++;
     });
-    page.pushOperators(P.popGraphicsState());
+    ops.push(P.endText(), P.popGraphicsState());
+    if (placed) page.pushOperators.apply(page, ops);
     return placed;
   }
 
@@ -100,7 +136,7 @@
     $('go').disabled = true; $('cancel').hidden = false;
     $('pages').innerHTML = '';
     var lang = $('lang').value, scale = Number($('quality').value), skipText = $('skip').checked;
-    var worker, P, out, font, pdf, srcBytes, total = 0, made = 0, skipped = 0;
+    var worker, P, out, pdf, srcBytes, total = 0, made = 0, skipped = 0;
     var isPdf = /pdf/i.test(files[0].type) || /\.pdf$/i.test(files[0].name);
     var check = function () { if (cancelled) throw new Error('cancelled'); };
 
@@ -113,6 +149,12 @@
       return Tesseract.createWorker(lang, 1, { workerPath: LIBS.workerPath, corePath: LIBS.corePath, langPath: LIBS.langPath(lang) });
     }).then(function (w) {
       worker = w;
+      // Keep Japanese, Chinese and Korean text together rather than spacing every character
+      var params = {};
+      if (CJK.test(lang)) params.preserve_interword_spaces = '1';
+      if (/_vert$/.test(lang)) params.tessedit_pageseg_mode = '5'; // a block of vertical columns
+      return Object.keys(params).length ? worker.setParameters(params) : null;
+    }).then(function () {
       check();
       if (!isPdf) return P.PDFDocument.create();
       return files[0].arrayBuffer().then(function (buf) {
@@ -121,9 +163,7 @@
       }).then(function (r) { pdf = r[0]; return r[1]; });
     }).then(function (doc) {
       out = doc;
-      return out.embedFont(P.StandardFonts.Helvetica);
-    }).then(function (f) {
-      font = f;
+      textFont = null;
       total = isPdf ? pdf.numPages : files.length;
       var chain = Promise.resolve();
       for (var i = 0; i < total; i++) (function (i) {
@@ -139,7 +179,7 @@
               var c = document.createElement('canvas');
               c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
               return pg.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
-                return { canvas: c, has: chars > 40, toPdf: function (x, y) { return vp.convertToPdfPoint(x, y); }, page: out.getPage(i) };
+                return { canvas: c, has: chars > 40, corners: [vp.convertToPdfPoint(0, 0), vp.convertToPdfPoint(c.width, 0), vp.convertToPdfPoint(0, c.height)], page: out.getPage(i) };
               });
             });
           }) : imageToCanvas(files[i]).then(function (c) {
@@ -147,15 +187,19 @@
             return new Promise(function (ok) { c.toBlob(ok, 'image/jpeg', 0.85); }).then(function (blob) { return blob.arrayBuffer(); }).then(function (jpg) { return out.embedJpg(jpg); }).then(function (img) {
               var page = out.addPage([wPt, hPt]);
               page.drawImage(img, { x: 0, y: 0, width: wPt, height: hPt });
-              return { canvas: c, has: false, toPdf: function (x, y) { return [x * wPt / c.width, hPt - y * hPt / c.height]; }, page: page };
+              return { canvas: c, has: false, corners: [[0, hPt], [wPt, hPt], [0, 0]], page: page };
             });
           });
           return step.then(function (s) {
             box.insertAdjacentHTML('afterbegin', '<img alt="" src="' + s.canvas.toDataURL('image/jpeg', 0.4) + '">');
             if (s.has && skipText) { box.classList.add('skip'); skipped++; return; }
-            return worker.recognize(s.canvas, {}, { text: true, blocks: true, hocr: false, tsv: false }).then(function (res) {
+            var res;
+            return worker.recognize(s.canvas, { pdfTitle: 'Readable', pdfTextOnly: true }, { pdf: !textFont, blocks: true, text: false, hocr: false, tsv: false }).then(function (r) {
               check();
-              addTextLayer(s.page, wordsOf(res.data), s.toPdf, font, P);
+              res = r;
+              return textFont ? null : loadFont(out, new Uint8Array(res.data.pdf), P);
+            }).then(function () {
+              addTextLayer(s.page, wordsOf(res.data), s.corners, s.canvas.width, s.canvas.height, /_vert$/.test(lang), P);
               box.classList.add('done'); made++;
               $('done').textContent = made;
             });

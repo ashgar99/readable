@@ -16,7 +16,7 @@
 - Adds an invisible text layer to scanned PDFs, so they look the same but can be searched, selected, copied and highlighted.
 - Turns photos of pages (JPG or PNG) into one searchable PDF.
 - Skips pages that already contain text, so mixed documents are handled quickly.
-- Supports English, French, German, Spanish, Italian, Portuguese and Dutch.
+- Supports English, French, German, Spanish, Italian, Portuguese, Dutch, Japanese, Chinese (Simplified and Traditional) and Korean, including vertical Japanese and Chinese.
 - Runs entirely in your browser using [Tesseract.js](https://tesseract.projectnaptha.com/). Your files are never uploaded.
 
 
@@ -27,7 +27,7 @@
 3. Pick the language of the text, then click **Make searchable**.
 4. The searchable PDF downloads when it is finished.
 
-The first run downloads the text-recognition engine and language data (about 10 MB), which your browser then keeps for next time.
+The first run downloads the text-recognition engine and language data (about 10 MB, plus a few MB for Japanese, Chinese or Korean), which your browser then keeps for next time.
 
 
 ## Browser support 🌐
@@ -36,7 +36,8 @@ Works in current versions of Chrome, Edge, Brave, Firefox and Safari, on compute
 
 ## Limitations ⚠️
 
-- Latin-script languages only for now. Chinese, Japanese, Korean, Arabic and other scripts need fonts that would make the tool much larger.
+- Arabic, Hebrew and other right-to-left scripts are not supported yet.
+- For Japanese and Chinese books printed in vertical columns, choose the **vertical** option.
 - Handwriting, very low-resolution scans and complex layouts may not be recognised well. Try the **High** quality setting for small print.
 - Pages with existing text are left as they are when "Skip pages that already have text" is on.
 

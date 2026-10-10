@@ -409,13 +409,24 @@
             <div class="row" style="margin-top: 18px;">
               <div class="field"><label for="lang">Language of the text</label>
                 <select id="lang">
-                  <option value="eng">English</option>
-                  <option value="fra">French</option>
-                  <option value="deu">German</option>
-                  <option value="spa">Spanish</option>
-                  <option value="ita">Italian</option>
-                  <option value="por">Portuguese</option>
-                  <option value="nld">Dutch</option>
+                  <optgroup label="European">
+                    <option value="eng">English</option>
+                    <option value="fra">French</option>
+                    <option value="deu">German</option>
+                    <option value="spa">Spanish</option>
+                    <option value="ita">Italian</option>
+                    <option value="por">Portuguese</option>
+                    <option value="nld">Dutch</option>
+                  </optgroup>
+                  <optgroup label="East Asian">
+                    <option value="jpn">Japanese</option>
+                    <option value="jpn_vert">Japanese (vertical)</option>
+                    <option value="chi_sim">Chinese, Simplified</option>
+                    <option value="chi_sim_vert">Chinese, Simplified (vertical)</option>
+                    <option value="chi_tra">Chinese, Traditional</option>
+                    <option value="chi_tra_vert">Chinese, Traditional (vertical)</option>
+                    <option value="kor">Korean</option>
+                  </optgroup>
                 </select>
               </div>
               <div class="field"><label for="quality">Quality</label>
@@ -436,8 +447,8 @@
               <button class="b primary" id="go" type="button" disabled>Make searchable</button>
               <button class="b ghost" id="cancel" type="button" hidden>Cancel</button>
             </div>
-            <p class="note">The first run downloads the text-recognition engine (about 10 MB), which your browser then keeps. Large scans can take a minute or two.</p>
-            <p class="note">Works with Latin-script languages. Handwriting and very low-quality scans may not be recognised well.</p>
+            <p class="note">The first run downloads the text-recognition engine (about 10 MB) and the language you choose, which your browser then keeps. Large scans can take a minute or two.</p>
+            <p class="note">Works with European languages, Japanese, Chinese and Korean, including vertical text. Handwriting and very low-quality scans may not be recognised well.</p>
           </div>
         </div>
       </div>
