@@ -1,0 +1,38 @@
+# Readable
+
+> Readable is a free, open-source tool that turns scanned PDFs and photos of pages into searchable, highlightable PDFs using text recognition (OCR) in your browser. Files are never uploaded, and it supports English, European languages, Japanese, Chinese and Korean, including vertical text.
+
+- Website: https://ashgar99.github.io/readable/
+- Source code: https://github.com/ashgar99/readable
+- Licence: MIT. Free, with no account, adverts or tracking.
+- Part of Unikit, free tools for university students: https://ashgar99.github.io/
+
+## Features
+
+- Adds an invisible, searchable text layer to scanned PDFs
+- Turns photos of pages into one searchable PDF
+- Runs text recognition in your browser with no upload
+- Supports Japanese, Chinese and Korean, including vertical text
+- Skips pages that already contain text
+
+## Questions and answers
+
+### What is Readable?
+
+Readable is a free, open-source tool that makes scanned PDFs and photos of pages searchable and highlightable, using text recognition (OCR) that runs in your browser. Your files are never uploaded.
+
+### How do I make a scanned PDF searchable?
+
+Open Readable, choose your scanned PDF and the language of the text, and click Make searchable. It downloads a new PDF that looks the same but lets you search, select, copy and highlight the text.
+
+### Why can’t I highlight text in my reading PDF?
+
+Scanned readings are usually pictures of pages, so there is no text to select. Readable recognises the text and adds an invisible text layer over the image.
+
+### Can Readable read Japanese, Chinese or Korean?
+
+Yes. Choose Japanese, Chinese (Simplified or Traditional) or Korean, or the vertical options for books printed in columns.
+
+### Is it safe to use with course materials?
+
+Yes. Unlike most online OCR tools, Readable processes everything on your own computer, so readings are never uploaded to anyone else’s server.

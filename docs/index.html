@@ -3,8 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Readable: make scanned PDFs searchable</title>
-  <meta name="description" content="Readable is a free, open-source tool that turns scanned reading packs and photos of pages into searchable, highlightable PDFs, entirely in your browser.">
+  <title>Readable: Make Scanned PDFs Searchable, Free and Private</title>
+  <meta name="description" content="Make scanned readings and photos of pages searchable and highlightable in your browser, with no upload. Supports Japanese, Chinese, Korean and more.">
+  <link rel="canonical" href="https://ashgar99.github.io/readable/">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="theme-color" content="#000000">
+  <meta name="application-name" content="Readable">
+  <meta name="apple-mobile-web-app-title" content="Readable">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Unikit">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:title" content="Readable: Make Scanned PDFs Searchable, Free and Private">
+  <meta property="og:description" content="Make scanned readings and photos of pages searchable and highlightable in your browser, with no upload. Supports Japanese, Chinese, Korean and more.">
+  <meta property="og:url" content="https://ashgar99.github.io/readable/">
+  <meta property="og:image" content="https://ashgar99.github.io/readable/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Readable: Readable is a free, open-source tool that turns scanned PDFs and photos of pages into searchable, highlightable PDFs using text recognition (OCR) in your browser.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Readable: Make Scanned PDFs Searchable, Free and Private">
+  <meta name="twitter:description" content="Make scanned readings and photos of pages searchable and highlightable in your browser, with no upload. Supports Japanese, Chinese, Korean and more.">
+  <meta name="twitter:image" content="https://ashgar99.github.io/readable/og.png">
+  <link rel="alternate" type="text/plain" title="Readable for AI assistants" href="https://ashgar99.github.io/readable/llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ashgar99.github.io/#unikit","name":"Unikit","url":"https://ashgar99.github.io/","logo":"https://ashgar99.github.io/logo.png","sameAs":["https://github.com/ashgar99"],"description":"Free, open-source tools for university students who use Moodle."},{"@type":"WebSite","@id":"https://ashgar99.github.io/#website","name":"Unikit","url":"https://ashgar99.github.io/","publisher":{"@id":"https://ashgar99.github.io/#unikit"}},{"@type":"WebApplication","@id":"https://ashgar99.github.io/readable/#app","name":"Readable","url":"https://ashgar99.github.io/readable/","description":"Readable is a free, open-source tool that turns scanned PDFs and photos of pages into searchable, highlightable PDFs using text recognition (OCR) in your browser. Files are never uploaded, and it supports English, European languages, Japanese, Chinese and Korean, including vertical text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any desktop browser","browserRequirements":"Chrome, Edge, Brave, Arc, Opera, Vivaldi, Firefox or Safari","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"isAccessibleForFree":true,"featureList":["Adds an invisible, searchable text layer to scanned PDFs","Turns photos of pages into one searchable PDF","Runs text recognition in your browser with no upload","Supports Japanese, Chinese and Korean, including vertical text","Skips pages that already contain text"],"inLanguage":"en-GB","image":"https://ashgar99.github.io/readable/og.png","screenshot":"https://ashgar99.github.io/readable/og.png","license":"https://github.com/ashgar99/readable/blob/main/LICENSE","softwareHelp":"https://github.com/ashgar99/readable#readme","datePublished":"2026-10-10","dateModified":"2026-10-10","isPartOf":{"@id":"https://ashgar99.github.io/#website"},"publisher":{"@id":"https://ashgar99.github.io/#unikit"},"audience":{"@type":"EducationalAudience","educationalRole":"student"}},{"@type":"SoftwareSourceCode","name":"Readable source code","codeRepository":"https://github.com/ashgar99/readable","programmingLanguage":"JavaScript","license":"https://opensource.org/licenses/MIT","targetProduct":{"@id":"https://ashgar99.github.io/readable/#app"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Unikit","item":"https://ashgar99.github.io/"},{"@type":"ListItem","position":2,"name":"Readable","item":"https://ashgar99.github.io/readable/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is Readable?","acceptedAnswer":{"@type":"Answer","text":"Readable is a free, open-source tool that makes scanned PDFs and photos of pages searchable and highlightable, using text recognition (OCR) that runs in your browser. Your files are never uploaded."}},{"@type":"Question","name":"How do I make a scanned PDF searchable?","acceptedAnswer":{"@type":"Answer","text":"Open Readable, choose your scanned PDF and the language of the text, and click Make searchable. It downloads a new PDF that looks the same but lets you search, select, copy and highlight the text."}},{"@type":"Question","name":"Why can’t I highlight text in my reading PDF?","acceptedAnswer":{"@type":"Answer","text":"Scanned readings are usually pictures of pages, so there is no text to select. Readable recognises the text and adds an invisible text layer over the image."}},{"@type":"Question","name":"Can Readable read Japanese, Chinese or Korean?","acceptedAnswer":{"@type":"Answer","text":"Yes. Choose Japanese, Chinese (Simplified or Traditional) or Korean, or the vertical options for books printed in columns."}},{"@type":"Question","name":"Is it safe to use with course materials?","acceptedAnswer":{"@type":"Answer","text":"Yes. Unlike most online OCR tools, Readable processes everything on your own computer, so readings are never uploaded to anyone else’s server."}}]}]}</script>
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,6 +374,16 @@
       .table td:last-child { position: absolute; right: 0; top: 10px; width: auto; }
       .table td:first-child input { padding-right: 52px; }
     }
+    /* Questions and answers */
+    .qa-list { max-width: 896px; margin: 48px auto 0; text-align: left; }
+    .qa { box-shadow: 0 1px 0 var(--line); }
+    .qa summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 0; }
+    .qa summary::-webkit-details-marker { display: none; }
+    .qa summary::after { content: "+"; flex: none; font-size: 26px; font-weight: 300; line-height: 1; color: var(--softer); transition: transform 0.2s; }
+    .qa[open] summary::after { transform: rotate(45deg); }
+    .qa h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); font-weight: 500; letter-spacing: -0.01em; color: var(--text); margin: 0; }
+    .qa p { color: var(--soft); font-size: 17px; line-height: 1.7; padding: 0 48px 28px 0; margin: 0; }
+
     :root { --blue: #2fd6c3; --blue-light: #d3f5f0; --blue-deep: #0b8f86; --blue-rgb: 47, 214, 195; --deep-rgb: 11, 143, 134; }
 
     .pages { display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 8px; margin-top: 16px; }
@@ -388,7 +419,7 @@
     <div class="container">
       <div class="wordmark"><img src="logo.svg" alt=""><span>Readable</span></div>
       <h1>Turn scanned readings into PDFs you can search and highlight</h1>
-      <p class="tag">v1.0 released on 10 October 2026 &nbsp;&middot;&nbsp; Free and open source &nbsp;&middot;&nbsp; Part of Unikit</p>
+      <p class="tag">v1.0 released on 10 October 2026 &nbsp;&middot;&nbsp; Free and open source &nbsp;&middot;&nbsp; Part of <a href="https://ashgar99.github.io/">Unikit</a></p>
       <a class="btn open" href="#app">Open Readable</a>
     </div>
   </header>
@@ -472,14 +503,40 @@
         <div class="tile"><div class="n">3</div><h3>Search and highlight</h3><p>Download the new PDF. It looks the same, but you can now search, select, copy and highlight the text.</p></div>
       </div>
     </section>
+
+    <section id="faq" class="faq">
+      <h2>Questions and Answers</h2>
+      <div class="qa-list">
+        <details class="qa" open>
+          <summary><h3>What is Readable?</h3></summary>
+          <p>Readable is a free, open-source tool that makes scanned PDFs and photos of pages searchable and highlightable, using text recognition (OCR) that runs in your browser. Your files are never uploaded.</p>
+        </details>
+        <details class="qa">
+          <summary><h3>How do I make a scanned PDF searchable?</h3></summary>
+          <p>Open Readable, choose your scanned PDF and the language of the text, and click Make searchable. It downloads a new PDF that looks the same but lets you search, select, copy and highlight the text.</p>
+        </details>
+        <details class="qa">
+          <summary><h3>Why can’t I highlight text in my reading PDF?</h3></summary>
+          <p>Scanned readings are usually pictures of pages, so there is no text to select. Readable recognises the text and adds an invisible text layer over the image.</p>
+        </details>
+        <details class="qa">
+          <summary><h3>Can Readable read Japanese, Chinese or Korean?</h3></summary>
+          <p>Yes. Choose Japanese, Chinese (Simplified or Traditional) or Korean, or the vertical options for books printed in columns.</p>
+        </details>
+        <details class="qa">
+          <summary><h3>Is it safe to use with course materials?</h3></summary>
+          <p>Yes. Unlike most online OCR tools, Readable processes everything on your own computer, so readings are never uploaded to anyone else’s server.</p>
+        </details>
+      </div>
+    </section>
   </main>
 
   <footer>
     <div class="f-card">
-      <div class="f-brand"><img src="logo.svg" alt="">Readable<span style="font-size:15px;color:var(--softer)">Part of Unikit, free tools for students</span></div>
+      <div class="f-brand"><img src="logo.svg" alt="">Readable<a href="https://ashgar99.github.io/" style="font-size:15px;color:var(--softer)">Part of Unikit, free tools for students</a></div>
       <div class="f-col"><h4>Readable</h4><a href="#app">Open Readable</a><a href="#why">Why</a><a href="#how">How it works</a></div>
       <div class="f-col"><h4>Help</h4><a href="https://github.com/ashgar99/readable#browser-support-">Browser support</a><a href="https://github.com/ashgar99/readable#troubleshooting-">Troubleshooting</a><a href="https://github.com/ashgar99/readable/issues">Report a problem</a></div>
-      <div class="f-col"><h4>Unikit</h4><a class="fam" href="https://ashgar99.github.io/moodle-module-downloader/"><img src="https://ashgar99.github.io/moodle-module-downloader/logo.svg" alt="">Modzip</a><a class="fam" href="https://ashgar99.github.io/subzip/"><img src="https://ashgar99.github.io/subzip/logo.svg" alt="">Subzip</a><a class="fam" href="https://ashgar99.github.io/duecal/"><img src="https://ashgar99.github.io/duecal/logo.svg" alt="">Duecal</a><a class="fam" href="https://ashgar99.github.io/termcal/"><img src="https://ashgar99.github.io/termcal/logo.svg" alt="">Termcal</a><a class="fam" href="https://ashgar99.github.io/gradewise/"><img src="https://ashgar99.github.io/gradewise/logo.svg" alt="">Gradewise</a><a class="fam" href="https://ashgar99.github.io/wordfair/"><img src="https://ashgar99.github.io/wordfair/logo.svg" alt="">Wordfair</a></div>
+      <div class="f-col"><h4>Unikit</h4><a class="fam" href="https://ashgar99.github.io/moodle-module-downloader/"><img src="https://ashgar99.github.io/moodle-module-downloader/logo.svg" alt="">Modzip</a><a class="fam" href="https://ashgar99.github.io/subzip/"><img src="https://ashgar99.github.io/subzip/logo.svg" alt="">Subzip</a><a class="fam" href="https://ashgar99.github.io/duecal/"><img src="https://ashgar99.github.io/duecal/logo.svg" alt="">Duecal</a><a class="fam" href="https://ashgar99.github.io/termcal/"><img src="https://ashgar99.github.io/termcal/logo.svg" alt="">Termcal</a><a class="fam" href="https://ashgar99.github.io/gradewise/"><img src="https://ashgar99.github.io/gradewise/logo.svg" alt="">Gradewise</a><a class="fam" href="https://ashgar99.github.io/wordfair/"><img src="https://ashgar99.github.io/wordfair/logo.svg" alt="">Wordfair</a><a href="https://ashgar99.github.io/">All Unikit tools</a></div>
       <div class="f-col"><h4>Project</h4><a href="https://github.com/ashgar99/readable">Source code</a><a href="https://github.com/ashgar99/readable/blob/main/LICENSE">MIT licence</a><a href="https://github.com/ashgar99/readable#privacy-and-security-">Privacy</a></div>
       <div class="f-base">
         <span>Made by a student of 2026. Free and open source, with no ads or tracking.</span>
